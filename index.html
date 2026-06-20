@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F28Q22D1LS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-F28Q22D1LS');
+  </script>
+  <meta charset="utf-8">
+  <meta name="description" content="FlowDPG: Deterministic Policy Gradient on Flow Matching Policies for Real-World Manipulation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowDPG</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <link rel="icon" href="./favicon.ico?">
+
+  <script src="./static/js/ajax.googleapis.com_ajax_libs_jquery_3.5.1_jquery.min.js"></script>
+  <script src="./static/js/isInViewport.min.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">FlowDPG: Deterministic Policy Gradient on Flow Matching Policies for Real-World Manipulation</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <h2 class="title is-2">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Real-world reinforcement learning for robotic manipulation remains
+challenging, and this difficulty is amplified for flow matching
+policies: applying policy gradient methods to these policies is
+fundamentally limited by the need to backpropagate through time
+(BPTT) along the multi-step ODE that maps noise to actions, which is
+computationally prohibitive and numerically fragile. We propose
+FlowDPG, a DDPG-style method specifically designed for flow
+matching policies that distills the critic gradient into the velocity
+field at training time, bypassing BPTT entirely. Intuitively, FlowDPG
+combines two complementary vectors: the demonstration-driven velocity
+that keeps the action feasible, and the critic-driven correction that
+steers it toward higher value. Our contributions are threefold: (1) a
+BPTT-free distillation framework that enables stable DDPG-style policy
+improvement on flow matching policies, (2) a formal connection between
+the FlowDPG update direction and vanilla Deterministic Policy Gradient
+via three explicit approximations, and (3) real-world validation on a
+long-horizon, multi-stage, dual-arm AirPods assembly task, where
+FlowDPG attains a 92% end-to-end success rate, substantially
+outperforming recent RL methods spanning value-conditioning,
+auxiliary-module adaptation, and adjoint-based critic-gradient
+approaches.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds">
+        <h2 class="title is-2">Method Overview</h2>
+        <div class="is-centered">
+          <center>
+            <video autoplay muted loop playsinline controls poster="./resources/loading-icon.gif" style="width: 95%; border: 1px solid #bbb; border-radius: 10px; margin: 2.0%;">
+              <source src="video/flowdpg_overview.mp4" type="video/mp4">
+            </video>
+          </center>
+        </div>
+        <div class="content has-text-left" style="margin-top: 1rem;">
+          <p>
+            Classical flow matching transports noise $\epsilon$ to a demonstration-feasible action $a$ via $v_\theta$, and lacks the ability to explore new actions outside the demonstration distribution. FlowDPG adds a critic-driven correction along $\nabla_a Q(s, a)$ to reach a value-improved target $a^*$, then distills the resulting velocity $v'_\theta$ back into the flow field; in this process, new actions with high value may be explored.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-bottom: 0">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds no-bottom-padding">
+        <h2 class="title is-2">Assembling 25 AirPod Cases in 1 Hour Uncut</h2>
+        <iframe height="500" src="https://youtu.be/6JwE-UmHt7g?si=Y4swCf1wrb2Cwdm7" title="YouTube video player" frameborder="0" style="border: 1px solid #bbb; border-radius: 10px; width: 100%;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="content has-text-left" style="margin-top: 1rem;">
+          The policy trained by FlowDPG autonomously assembles 25 AirPods cases (50 AirPods) in a row without human intervention. It recovers from dropped grasps by re-grasping, corrects misalignments with fine adjustments, and removes-and-retries when an AirPod is inserted incorrectly.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-bottom: 0">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds no-bottom-padding">
+        <h2 class="title is-2">Disturbance Robustness</h2>
+        <iframe height="500" src="https://youtu.be/hCrqAWktT8k?si=IhcHqrPyjL-tpJIi" title="YouTube video player" frameborder="0" style="border: 1px solid #bbb; border-radius: 10px; width: 100%;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="content has-text-left" style="margin-top: 1rem;">
+          The policy trained by FlowDPG is robust to a wide range of disturbances, including a human removing an already grasped case or AirPod, closing an already opened AirPod case, reshuffling the AirPod layout in the tray, and dislodging an already inserted AirPod.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-2" style="text-align: center; padding-bottom: 10px;">Recovery from Unseen Failures</h2>
+        <div class="row">
+          <div class="col">
+            <video autoplay muted loop playsinline controls src="video/Normal_failure_compress_2.mp4" width="100%"
+                   style="border-radius:10px; "></video>
+          </div>
+          <div class="col">
+            <video autoplay muted loop playsinline controls src="video/Emergent_regrasp_compress_2.mp4" width="100%"
+                   style="border-radius:10px; "></video>
+          </div>
+        </div>
+        <div class="content has-text-left" style="margin-top: 1rem;">
+          The left video shows that a policy trained only via behavior cloning on the original dataset, or via value-conditioned reweighting of different data points without exploring actions outside the dataset, cannot recover from an unseen failure. By contrast, the right video shows that by exploring higher-value actions during training, FlowDPG produces emergent re-grasp behaviors that enable recovery from such failures.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-2" style="text-align: center; padding-bottom: 10px;">Robust Insertion Beyond Demonstrations</h2>
+        <div class="row">
+          <div class="col">
+            <video autoplay muted loop playsinline controls src="video/Multiple_adjustment_compress_2.mp4" width="100%"
+                   style="border-radius:10px; "></video>
+          </div>
+          <div class="col">
+            <video autoplay muted loop playsinline controls src="video/strong_robustness_compress_2.mp4" width="100%"
+                   style="border-radius:10px; "></video>
+          </div>
+        </div>
+        <div class="content has-text-left" style="margin-top: 1rem;">
+          The left video shows the policy repeatedly alternating between thinking and action, adjusting the insertion angle multiple times before succeeding. The right video shows that even after accidentally grasping two AirPods at once, the policy can still insert one of them—behavior that is entirely out of distribution. These examples demonstrate that the trained policy can handle such corner cases.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "\\[", right: "\\]", display: true}
+      ],
+      throwOnError: false
+    });
+  });
+</script>
+<script>
+  setInterval(function() {
+    $('video').each(function() {
+      if ($(this).is(":in-viewport")) {
+        this.play();
+      } else {
+        this.pause();
+      }
+    });
+  }, 200);
+</script>
+
+</body>
+</html>
