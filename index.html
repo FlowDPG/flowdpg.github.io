@@ -368,10 +368,10 @@ two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cook
           standard error over the five checkpoint means. Egg task is offline-only.
         </p>
 
-        <h3 class="title is-4" style="text-align: center; margin-top: 0.5rem;">Full baseline sweep</h3>
+        <h3 class="title is-4" style="text-align: center; margin-top: 0.5rem;">Full baseline sweep (Airpods)</h3>
         <div class="chartrow">
 <svg viewBox="0 0 780 290" class="barchart wide" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparison against prior RL methods (AirPods)">
-<text x="493.0" y="16" class="pt">Comparison against prior RL methods (AirPods)</text>
+<text x="493.0" y="16" class="pt">Comparison against prior RL methods</text>
 <line x1="252.0" y1="26" x2="252.0" y2="254.0" class="grid"/>
 <text x="252.0" y="269.0" class="xtick">0</text>
 <line x1="348.4" y1="26" x2="348.4" y2="254.0" class="grid"/>
@@ -425,11 +425,8 @@ two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cook
 </svg>
 </div>
         <p class="note" style="margin:0.6rem 0 0;">
-          From the paper, under its original protocol: 25 cases (50 pod manipulations) per method,
-          reporting the best end-to-end success rate, so the numbers differ slightly from the
-          5-checkpoint evaluation above. All methods share the same backbone, action-chunk horizon,
-          reward, value head and offline/online data split; only the policy-extraction objective
-          differs.
+          25 cases (50 pod manipulations) per method,
+          reporting the best end-to-end success rate.
         </p>
       </div>
     </div>
