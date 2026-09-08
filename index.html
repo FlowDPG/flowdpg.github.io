@@ -56,6 +56,30 @@
     .barchart .fam { font:600 9.5px 'Noto Sans',sans-serif; fill:#7d766a; text-anchor:end; }
     .barchart .fambr { fill:none; stroke:#c9c2b6; stroke-width:1.2; }
     .barchart .cellv { font:600 9px 'Noto Sans',sans-serif; text-anchor:middle; }
+    .authors { font-size:1.22rem; color:#1a202c; line-height:2.1; margin:0.9rem 0 0.2rem;
+               font-weight:400; }
+    .authors a { color:#1a202c; text-decoration:none;
+                 border-bottom:1.5px solid rgba(226,100,60,.45); padding-bottom:1px; }
+    .authors a:hover { color:#E2643C; border-color:#E2643C; }
+    .authors sup { font-size:0.62em; color:#8a8478; }
+    .logorow { display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+               margin:1.6rem 0 1.0rem; }
+    .logo { display:inline-block; position:relative; margin:0.5rem 1.7rem; }
+    .logo img { display:block; width:auto; object-fit:contain; }
+    .logo sup { position:absolute; top:-2px; right:-11px;
+                font-size:0.78rem; color:#8a8478; font-weight:500; }
+    .logo img.l-cmu   { height:26px; }
+    .logo img.l-upenn { height:32px; }
+    .logo img.l-skild { height:32px; }
+    .eqcontrib { font-size:0.92rem; color:#7d766a; margin:0 0 0.5rem; }
+    .venue { font-size:1.48rem; font-weight:700; color:#E2643C; letter-spacing:.03em;
+             margin:0.15rem 0 1.05rem; }
+    .linkrow { display:flex; flex-wrap:wrap; gap:0.55rem; justify-content:center;
+               margin-top:0.4rem; }
+    .linkbtn { display:inline-flex; align-items:center; gap:0.4rem;
+               background:#3a3631; color:#fff; border-radius:999px;
+               padding:0.42rem 1.15rem; font-size:0.95rem; text-decoration:none; }
+    .linkbtn:hover { background:#E2643C; color:#fff; }
   </style>
 </head>
 <body>
@@ -66,6 +90,32 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">FlowDPG: Deterministic Policy Gradient on Flow Matching Policies for Real-World Manipulation</h1>
+
+          <p class="authors">
+            <a href="https://tenhearts.github.io/">Kexin Shi</a><sup>1,2</sup> &nbsp;
+            <a href="https://junyaoshi.github.io/">Junyao Shi</a><sup>1,3</sup> &nbsp;
+            <a href="https://poorvirhebbar.github.io/">Poorvi Hebbar</a><sup>1</sup> &nbsp;
+            <a href="https://scholar.google.com/citations?user=b43yP_sAAAAJ&hl=en">Zhuolun Zhao</a><sup>1</sup><br>
+            <a href="https://www.linkedin.com/in/tarun-amarnath/">Tarun Amarnath</a><sup>1</sup> &nbsp;
+            <a href="https://scholar.google.com/citations?user=SdrsbiUAAAAJ&hl=en">Yifan Su</a><sup>1</sup> &nbsp;
+            <a href="https://shikharbahl.github.io/">Shikhar Bahl</a><sup>1</sup> &nbsp;
+            <a href="https://www.cs.cmu.edu/~dpathak/">Deepak Pathak</a><sup>1,2</sup>
+          </p>
+
+          <div class="logorow">
+            <span class="logo"><img class="l-skild" src="static/images/logo_skild.png" alt="Skild AI"><sup>1</sup></span>
+            <span class="logo"><img class="l-cmu" src="static/images/logo_cmu.png" alt="Carnegie Mellon University"><sup>2</sup></span>
+            <span class="logo"><img class="l-upenn" src="static/images/logo_upenn.png" alt="University of Pennsylvania"><sup>3</sup></span>
+          </div>
+
+          <!-- <p class="eqcontrib">&dagger; Equal advising.</p> -->
+          <p class="venue">CoRL 2026</p>
+
+          <div class="linkrow">
+            <a class="linkbtn" href="https://arxiv.org/abs/2606.22303">arXiv</a>
+            <a class="linkbtn" href="https://arxiv.org/pdf/2606.22303">Paper</a>
+            <a class="linkbtn" href="https://www.youtube.com/watch?v=6JwE-UmHt7g">Video</a>
+          </div>
         </div>
       </div>
     </div>
@@ -148,6 +198,20 @@ two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cook
   </div>
 </section>
 
+<section class="section" style="padding-bottom: 0">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-two-thirds no-bottom-padding">
+        <h2 class="title is-2">Disturbance Robustness</h2>
+        <iframe height="500" src="https://www.youtube.com/embed/hCrqAWktT8k" title="YouTube video player" frameborder="0" style="border: 1px solid #bbb; border-radius: 10px; width: 100%;" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="content has-text-centered note" style="margin-top: 0.6rem;">
+          <p>A human removes a grasped case or pod &middot; closes an opened case &middot; reshuffles the tray &middot; dislodges an inserted pod</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="columns is-centered">
@@ -190,9 +254,9 @@ two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cook
             <p class="has-text-centered note" style="margin-top:0.4rem;">Failed rollout</p>
           </div>
         </div>
-        <!-- <div class="content has-text-left" style="margin-top: 1rem;">
+        <div class="content has-text-left" style="margin-top: 1rem;">
           <p>SARM progress overlaid on each episode. Left: it advances through the stages. Right: it stalls, then drops at the failure &mdash; and that is what the critic is updated on.</p>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
