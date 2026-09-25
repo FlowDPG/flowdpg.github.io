@@ -1,0 +1,79 @@
+1
+00:00:00,300 --> 00:00:04,600
+A flow policy makes each action chunk by integrating an ODE over many steps.
+
+2
+00:00:04,600 --> 00:00:09,600
+A DDPG-style update must push the critic gradient back through every step.
+
+3
+00:00:09,600 --> 00:00:15,800
+Memory grows with the step count, and the Jacobian product can explode or vanish.
+
+4
+00:00:16,300 --> 00:00:20,800
+Value-conditioning (RA-BC, AWR, RECAP) reweights the demonstrations.
+
+5
+00:00:20,800 --> 00:00:25,400
+It stays within the demonstrations and cannot synthesize new actions.
+
+6
+00:00:25,400 --> 00:00:30,000
+Auxiliary modules (DSRL, PLD, RLT) freeze the flow and learn its noise or a residual.
+
+7
+00:00:30,000 --> 00:00:34,600
+The base policy is never updated, so the adapter caps the headroom.
+
+8
+00:00:34,600 --> 00:00:39,200
+Adjoint methods (QAM) turn the critic gradient into a target at every ODE step.
+
+9
+00:00:39,200 --> 00:00:44,000
+But the critic is queried at generated actions, so its errors reach every step.
+
+10
+00:00:44,000 --> 00:00:49,600
+FlowDPG queries the critic once, at an in-distribution estimate, with no backprop through the ODE.
+
+11
+00:00:50,300 --> 00:00:55,200
+A training sample pairs noise x₀ with a demo action x₁; xₜ lies between them.
+
+12
+00:00:55,200 --> 00:01:00,600
+One forward pass projects xₜ to a clean-action estimate, â.
+
+13
+00:01:00,600 --> 00:01:06,200
+The critic gradient at â is rescaled to the local velocity: the adaptive shift.
+
+14
+00:01:06,200 --> 00:01:12,000
+The shifted action a* gives a new target u* = a* − x₀, fit with one L2 loss.
+
+15
+00:01:12,000 --> 00:01:17,800
+A BC anchor keeps actions feasible. Deployment stays a plain ODE solve.
+
+16
+00:01:18,300 --> 00:01:22,400
+The FlowDPG gradient is vanilla DPG under three explicit approximations.
+
+17
+00:01:22,400 --> 00:01:27,600
+Critic at â, so ODE sensitivity is the identity; one sampled t; a normalized step.
+
+18
+00:01:27,600 --> 00:01:32,800
+A consistency loss keeps â near the true endpoint, where the critic is reliable.
+
+19
+00:01:33,300 --> 00:01:39,000
+Offline: backbone, twin-critic IQL and flow actor train together on demonstrations.
+
+20
+00:01:39,000 --> 00:01:44,800
+Online: the robot collects rollouts while critic and actor update asynchronously.

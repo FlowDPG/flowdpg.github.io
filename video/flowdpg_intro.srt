@@ -1,0 +1,103 @@
+1
+00:00:00,300 --> 00:00:03,600
+Fine-tuning a flow-matching robot policy with real-world reinforcement learning.
+
+2
+00:00:03,600 --> 00:00:06,800
+Two long-horizon tasks on two robots, one method: FlowDPG.
+
+3
+00:00:13,300 --> 00:00:18,400
+Flow matching learns to carry noise to demonstrated actions.
+
+4
+00:00:18,600 --> 00:00:24,200
+Trained by imitation alone, a policy cannot recover from failures it has never seen.
+
+5
+00:00:24,200 --> 00:00:29,800
+Real-world RL can close this gap, but flow policies make it hard.
+
+6
+00:00:30,300 --> 00:00:34,600
+A flow policy makes each action chunk by integrating an ODE over many steps.
+
+7
+00:00:34,600 --> 00:00:39,600
+A DDPG-style update must push the critic gradient back through every step.
+
+8
+00:00:39,600 --> 00:00:45,800
+Memory grows with the step count, and the Jacobian product can explode or vanish.
+
+9
+00:00:46,300 --> 00:00:51,600
+Value-conditioning (RA-BC, AWR, RECAP) reweights demos: it only shifts mass between demonstrated modes.
+
+10
+00:00:51,600 --> 00:00:57,000
+Auxiliary modules (DSRL, PLD, RLT) freeze the flow and learn its noise or a residual.
+
+11
+00:00:57,000 --> 00:01:02,400
+Adjoint methods (QAM) carry the critic gradient back through every ODE step.
+
+12
+00:01:02,400 --> 00:01:07,800
+FlowDPG uses the critic gradient at a single point, with no backprop through the ODE.
+
+13
+00:01:08,300 --> 00:01:13,200
+A training sample pairs noise x₀ with a demo action x₁; xₜ lies between them.
+
+14
+00:01:13,200 --> 00:01:18,600
+One forward pass projects xₜ to a clean-action estimate, â.
+
+15
+00:01:18,600 --> 00:01:24,200
+The critic gradient at â is rescaled to the local velocity: the adaptive shift.
+
+16
+00:01:24,200 --> 00:01:30,000
+The shifted action a* gives a new target u* = a* − x₀, fit with one L2 loss.
+
+17
+00:01:30,000 --> 00:01:35,800
+A BC anchor keeps actions feasible. Deployment stays a plain ODE solve.
+
+18
+00:01:36,300 --> 00:01:40,400
+The FlowDPG gradient is vanilla DPG under three explicit approximations.
+
+19
+00:01:40,400 --> 00:01:45,600
+Critic at â, so ODE sensitivity is the identity; one sampled t; a normalized step.
+
+20
+00:01:45,600 --> 00:01:50,800
+A consistency loss keeps â near the true endpoint, where the critic is reliable.
+
+21
+00:01:51,300 --> 00:01:57,000
+Offline: backbone, twin-critic IQL and flow actor train together on demonstrations.
+
+22
+00:01:57,000 --> 00:02:02,800
+Online: the robot collects rollouts while critic and actor update asynchronously.
+
+23
+00:02:03,300 --> 00:02:06,200
+Imitation stays on the demonstrated action and fails.
+
+24
+00:02:06,400 --> 00:02:14,300
+FlowDPG adds a critic-driven correction toward a higher-value action a*, then distills it into the flow.
+
+25
+00:02:14,500 --> 00:02:24,800
+FlowDPG shows an emergent re-grasp that no demonstration contains.
+
+26
+00:02:25,400 --> 00:02:33,600
+The failed attempt, next to a newly explored action with higher value.

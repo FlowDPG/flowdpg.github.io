@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F28Q22D1LS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F28Q22D1LS');
+  </script>
+  <script>document.documentElement.className = document.documentElement.className.replace("no-js", "js");</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowDPG: Deterministic Policy Gradient on Flow Matching Policies for Real-World Manipulation</title>
+  <meta name="description" content="FlowDPG fine-tunes flow-matching robot policies with real-world reinforcement learning by distilling the critic gradient into the velocity field, with no backpropagation through the ODE. CoRL 2026.">
+  <meta property="og:title" content="FlowDPG: Deterministic Policy Gradient on Flow Matching Policies for Real-World Manipulation">
+  <meta property="og:description" content="Real-world RL fine-tuning for flow-matching policies, without backpropagation through the ODE. CoRL 2026.">
+  <meta property="og:image" content="static/images/og.jpg">
+  <meta name="theme-color" content="#fbfaf7">
+  <link rel="icon" href="./favicon.ico?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./static/css/flowdpg.css?v=20260925">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">FlowDPG</a>
+    <nav aria-label="Sections">
+      <a href="#videos">Videos</a>
+      <a href="#robustness">Robustness</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#recovery">Recovery</a>
+      <a href="#reward">Reward</a>
+      <a href="#ablations">Ablations</a>
+      <a href="#rubrics">Rubrics</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <h1>
+      <span class="wordmark">FlowDPG</span>
+      <span class="full">Deterministic Policy Gradient on Flow Matching Policies<br>for Real-World Manipulation</span>
+    </h1>
+    <p class="authors">
+      <span class="au"><a href="https://tenhearts.github.io/">Kexin Shi</a><sup>1,2</sup></span>
+      <span class="au"><a href="https://junyaoshi.github.io/">Junyao Shi</a><sup>1,3</sup></span>
+      <span class="au"><a href="https://poorvirhebbar.github.io/">Poorvi Hebbar</a><sup>1</sup></span>
+      <span class="au"><a href="https://scholar.google.com/citations?user=b43yP_sAAAAJ&amp;hl=en">Zhuolun Zhao</a><sup>1</sup></span><br>
+      <span class="au"><a href="https://www.linkedin.com/in/tarun-amarnath/">Tarun Amarnath</a><sup>1</sup></span>
+      <span class="au"><a href="https://scholar.google.com/citations?user=SdrsbiUAAAAJ&amp;hl=en">Yifan Su</a><sup>1</sup></span>
+      <span class="au"><a href="https://shikharbahl.github.io/">Shikhar Bahl</a><sup>1</sup></span>
+      <span class="au"><a href="https://www.cs.cmu.edu/~dpathak/">Deepak Pathak</a><sup>1,2</sup></span>
+    </p>
+    <div class="logos">
+      <span><img class="l-skild" src="static/images/logo_skild.png" alt="Skild AI"><sup>1</sup></span>
+      <span><img class="l-cmu" src="static/images/logo_cmu.png" alt="Carnegie Mellon University"><sup>2</sup></span>
+      <span><img class="l-upenn" src="static/images/logo_upenn.png" alt="University of Pennsylvania"><sup>3</sup></span>
+    </div>
+    <div class="venue">CoRL 2026</div>
+    <div class="links">
+      <a class="btn" href="https://arxiv.org/pdf/2606.22303"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM8 13h8v1.6H8V13zm0 3.4h8V18H8v-1.6z"/></svg>Paper</a>
+      <a class="btn" href="https://arxiv.org/abs/2606.22303"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v2H6v12h12v-5h2v7H4V4zm9 0h7v7h-2V7.4l-7.3 7.3-1.4-1.4L16.6 6H13V4z"/></svg>arXiv</a>
+      <a class="btn" href="https://www.youtube.com/watch?v=6JwE-UmHt7g"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>Video</a>
+      <a class="btn ghost" href="#bibtex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6h4v5H8.5c0 2 .8 3 2.5 3.4V17c-3-.4-4-2.6-4-6V6zm7 0h4v5h-2.5c0 2 .8 3 2.5 3.4V17c-3-.4-4-2.6-4-6V6z"/></svg>BibTeX</a>
+    </div>
+  </div>
+</section>
+
+<section class="abstract first" id="abstract">
+  <div class="narrow">
+    <div class="chapter">Abstract</div>
+    <p>
+      Real-world reinforcement learning for robotic manipulation remains challenging, and this
+      difficulty is amplified for flow matching policies: applying policy gradient methods to these
+      policies is fundamentally limited by the need to backpropagate through time (BPTT) along the
+      multi-step ODE that maps noise to actions, which is computationally prohibitive and numerically
+      fragile. We propose FlowDPG, a DDPG-style method specifically designed for flow matching
+      policies that distills the critic gradient into the velocity field at training time, bypassing
+      BPTT entirely. Intuitively, FlowDPG combines two complementary vectors: the demonstration-driven
+      velocity that keeps the action feasible, and the critic-driven correction that steers it toward
+      higher value. Our contributions are threefold: (1) a BPTT-free <i>in-place</i> framework that
+      leaves the deployed multi-step inference path unchanged, (2) a formal connection between the
+      FlowDPG update direction and vanilla Deterministic Policy Gradient via three explicit
+      approximations, and (3) real-world validation on two long-horizon, multi-stage, dual-arm tasks on
+      two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cooking on a YAM.
+    </p>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="wrap">
+    <div class="chapter">1 · Real-world results</div>
+    <h2>Two long-horizon tasks, fully autonomous</h2>
+
+    <h3 class="first-h3">AirPods assembly on Franka arms</h3>
+    <div class="frame">
+      <iframe src="https://www.youtube.com/embed/6JwE-UmHt7g" title="AirPods assembly on Franka arms" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <p class="meta">One hour uncut &middot; 25 cases back to back &middot; no human intervention</p>
+    <figure class="card setup">
+      <img src="static/images/airpods_setup.jpg" alt="The 8 stages of the AirPods task: grasp case, open case, grasp and insert the right pod, grasp and insert the left pod, close case, place case." loading="lazy" width="2400" height="676">
+    </figure>
+
+    <h3>Scrambled eggs on YAM arms<span class="tag">New</span></h3>
+    <div class="frame">
+      <iframe src="https://www.youtube.com/embed/Hj57nc59yTc" title="Scrambled eggs on YAM arms" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <p class="meta">14 stages &middot; tool use &middot; fluids</p>
+    <figure class="card setup">
+      <img src="static/images/egg_setup.jpg" alt="The 14 stages of the scrambled-egg task, from picking up the first egg to serving." loading="lazy" width="2400" height="511">
+    </figure>
+  </div>
+</section>
+
+<section id="robustness">
+  <div class="wrap">
+    <div class="chapter">2 · Robustness</div>
+    <h2>Human disturbances</h2>
+    <div class="frame">
+      <iframe src="https://www.youtube.com/embed/hCrqAWktT8k" title="Disturbance robustness" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <p class="meta">A human removes a grasped case or pod &middot; closes an opened case &middot; reshuffles the tray &middot; dislodges an inserted pod</p>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="chapter">3 · Method</div>
+    <h2>Critic gradient at one point, no backprop through the ODE</h2>
+    <div class="frame method-video">
+      <video data-autoplay muted loop playsinline controls preload="metadata" poster="static/images/method_poster.jpg">
+        <source src="video/flowdpg_method.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="chapter">4 · Main results</div>
+    <h2>FlowDPG vs. BC and QAM</h2>
+{{repeated}}
+    <p class="note">50 rollouts per cell (10 at each of 5 checkpoints). Rubric: 0&ndash;3 per stage (<a href="#rubrics">criteria</a>). Eggs: offline only.</p>
+
+    <h3>All baseline families (AirPods)</h3>
+{{sweep}}
+    <p class="note">25 cases per method; baselines trained offline only.</p>
+  </div>
+</section>
+
+<section id="recovery">
+  <div class="wrap">
+    <div class="chapter">5 · Recovery</div>
+    <h2>Recovery from unseen failures</h2>
+    <div class="duo">
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1686" height="948" src="video/egg_recovery_1.mp4"></video>
+        <figcaption><b>Eggs</b> &middot; re-grasping a dropped eggshell</figcaption>
+      </figure>
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1686" height="948" src="video/egg_recovery_2.mp4"></video>
+        <figcaption><b>Eggs</b> &middot; retrying a misplaced spatula</figcaption>
+      </figure>
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1920" height="1080" src="video/Emergent_regrasp_compress_2.mp4"></video>
+        <figcaption><b>AirPods</b> &middot; emergent re-grasp</figcaption>
+      </figure>
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1920" height="1080" src="video/strong_robustness_compress_2.mp4"></video>
+        <figcaption><b>AirPods</b> &middot; two pods grasped by accident, one still inserted</figcaption>
+      </figure>
+    </div>
+
+    <h3>Recovery rate under human disturbances (AirPods)</h3>
+{{disturb}}
+  </div>
+</section>
+
+<section id="reward">
+  <div class="wrap">
+    <div class="chapter">6 · Reward</div>
+    <h2>Stage-aware reward model</h2>
+    <div class="duo">
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1600" height="860" src="video/success.mp4"></video>
+        <figcaption><b>Successful rollout</b> &middot; predicted progress and stage</figcaption>
+      </figure>
+      <figure>
+        <video data-autoplay muted loop playsinline controls preload="metadata" width="1600" height="860" src="video/failure.mp4"></video>
+        <figcaption><b>Failed rollout</b> &middot; progress stalls, then drops</figcaption>
+      </figure>
+    </div>
+
+    <h3>Reward ablation</h3>
+{{heatmap}}
+    <p class="note">Share of AirPods episodes that get through each stage.</p>
+  </div>
+</section>
+
+<section id="ablations">
+  <div class="wrap">
+    <div class="chapter">7 · Ablations</div>
+    <h2>Consistency loss and adaptive shift</h2>
+{{ablation}}
+    <p class="note">Shading: &plusmn;1 SD. All variants include the online phase.</p>
+  </div>
+</section>
+
+<section id="rubrics-section">
+  <div class="wrap">
+    <details class="card rubrics" id="rubrics">
+      <summary>
+        <div>
+          <div class="sum-title">Evaluation rubrics</div>
+          <div class="sum-sub">0&ndash;3 per stage &middot; AirPods: 8 stages, 24 points &middot; Eggs: 14 stages, 42 points</div>
+        </div>
+        <span class="sum-cta"><span class="cta-closed">Click to expand</span><span class="cta-open">Collapse</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></span>
+      </summary>
+      <div class="rubric-body">
+        <p class="note" style="margin-top:0">A stage never reached scores 0. Criteria were fixed before scoring.</p>
+{{rubrics}}
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="bibtex">
+  <div class="wrap">
+    <div class="chapter">Citation</div>
+    <h2>BibTeX</h2>
+    <div class="card bib">
+      <button class="copy" id="copy-bib" type="button">Copy</button>
+<pre id="bibtex-code">{{bibtex}}</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">FlowDPG &middot; CoRL 2026</div>
+</footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredTags:['script','noscript','style','textarea','pre','code'],throwOnError:false});"></script>
+<script defer src="./static/js/flowdpg.js?v=20260925"></script>
+</body>
+</html>
