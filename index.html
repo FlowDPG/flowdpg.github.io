@@ -81,7 +81,7 @@
   <div class="narrow">
     <div class="chapter">Abstract</div>
     <p>
-      Real-world reinforcement learning for robotic manipulation remains challenging, and this
+      <!-- Real-world reinforcement learning for robotic manipulation remains challenging, and this
       difficulty is amplified for flow matching policies: applying policy gradient methods to these
       policies is fundamentally limited by the need to backpropagate through time (BPTT) along the
       multi-step ODE that maps noise to actions, which is computationally prohibitive and numerically
@@ -93,7 +93,28 @@
       leaves the deployed multi-step inference path unchanged, (2) a formal connection between the
       FlowDPG update direction and vanilla Deterministic Policy Gradient via three explicit
       approximations, and (3) real-world validation on two long-horizon, multi-stage, dual-arm tasks on
-      two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cooking on a YAM.
+      two different robots &mdash; AirPods assembly on a Franka and scrambled-egg cooking on a YAM. -->
+
+      Real-world reinforcement learning for robotic manipulation remains 
+challenging, and this difficulty is amplified for flow matching 
+policies: policy gradients must be backpropagated through time (BPTT) 
+along the multi-step ODE that maps noise to actions, which is 
+computationally prohibitive and numerically fragile. We propose 
+FlowDPG, a DDPG-style method for flow matching policies that 
+bypasses BPTT entirely. FlowDPG evaluates the critic gradient at a 
+one-step estimate of the clean action and distills the resulting 
+correction into the velocity field at training time, leaving multi-step 
+inference unchanged. Intuitively, it combines two complementary vectors: 
+the demonstration-driven velocity that keeps the action feasible, and 
+the critic-driven correction that steers it toward higher value. Our 
+contributions are threefold: (1) a BPTT-free distillation framework for 
+stable DDPG-style improvement of flow matching policies, (2) a formal 
+connection between the FlowDPG update and the vanilla deterministic 
+policy gradient via three explicit approximations, and (3) real-world 
+validation on two long-horizon tasks on different robots. FlowDPG 
+reaches 92% end-to-end success on dual-arm AirPods assembly with Franka 
+arms and an 86% rubric score on scrambled-egg cooking with YAM arms, 
+substantially outperforming recent RL methods.
     </p>
   </div>
 </section>
